@@ -1,27 +1,47 @@
-# io.github.mlinardos.kvstore.server.kvServer Application
+# KV Server
 
-In order to compile the io.github.mlinardos.kvstore.server.kvServer application, the use of maven is necessary.
-To download Maven please visit the https://maven.apache.org/ website and follow the instructions to download it and install it there.
+Distributed server implementation for the Key-Value Store with Trie-based indexing and fault-tolerant replication.
 
+## Prerequisites
 
+    Java 17 or higher
+    Maven 3.6 or higher
 
-## Compiling
+## Building
 
-Compile the project
+From the genData directory:
+```bash
+mvn clean install
+```
+Or from the project root:
 
 ```bash
-  cd [path]\io.github.mlinardos.kvstore.server.kvServer
-  mvn clean install # to compile every file from the start and erase the target folder
-  #The compiled .class files will be placed at the ./target/classes folder
+mvn clean install -pl kvServer
 ```
-
-## Run Locally
-
-Run the project
-
+## Usage
 
 ```bash
-  # do not cd to other folders
-
-  mvn exec:java -Dexec.mainClass="io.github.mlinardos.kvstore.server.kvServer" -Dexec.args="-a <ip> -p  <port>"
+mvn exec:java -Dexec.args="-a <address> -p <port>"
 ```
+
+
+| Parameter | Description                            | Example    | 
+|-----------|----------------------------------------|------------|
+| -a        | IP address to bind to                  | localhost  | 
+| -p        | Port to listen on                      | 8000       | 
+
+For fault tolerance, run multiple server instances on different ports
+## Supported Operations
+
+PUT - Store key-value pairs with nested data
+GET - Retrieve top-level keys
+DELETE - Remove keys from storage
+QUERY - Access nested values using dot notation
+COMPUTE - Execute mathematical operations on stored values
+
+## Error Handling 
+Error Handling
+The server returns:
+OK - Operation successful
+ERROR - Syntax error or malformed query
+NOT FOUND - Key doesn't exist
