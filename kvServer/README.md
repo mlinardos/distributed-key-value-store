@@ -10,6 +10,7 @@ Distributed server implementation for the Key-Value Store with Trie-based indexi
 ## Building
 
 From the genData directory:
+
 ```bash
 mvn clean install
 ```
@@ -31,17 +32,28 @@ mvn exec:java -Dexec.args="-a <address> -p <port>"
 | -p        | Port to listen on                      | 8000       | 
 
 For fault tolerance, run multiple server instances on different ports
+
 ## Supported Operations
 
 PUT - Store key-value pairs with nested data
+
 GET - Retrieve top-level keys
+
 DELETE - Remove keys from storage
+
 QUERY - Access nested values using dot notation
+
 COMPUTE - Execute mathematical operations on stored values
 
 ## Error Handling 
+
 Error Handling
+
+
 The server returns:
+
 OK - Operation successful
+
 ERROR - Syntax error or malformed query
+
 NOT FOUND - Key doesn't exist

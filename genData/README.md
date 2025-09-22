@@ -32,8 +32,13 @@ mvn exec:java -Dexec.args="-k <keyFile> -n <lines> -d <depth> -l <length> -m <ke
 ## Key file Format
 
 Create a space-separated file with key names and types:
+
 name string
+
 age int
+
 height float
+
 street string
+
 level int
