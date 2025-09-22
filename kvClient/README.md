@@ -1,18 +1,15 @@
-# io.github.mlinardos.kvstore.client.kvClient Application
+# KV Client
+Client application for the Distributed Key-Value Store. Handles data indexing, replication, and query operations across multiple servers.
 
-In order to compile the io.github.mlinardos.kvstore.client.kvClient application, the use of maven is necessary.
-To download Maven please visit the https://maven.apache.org/ website and follow the instructions to download it and install it there.
+## Prerequisites
 
+- Java 17 or higher
+- Maven 3.6 or higher
 
-
-## Compiling
-
-Compile the project
-
+## Building
+From the kvClient directory:
 ```bash
-  cd [path]\io.github.mlinardos.kvstore.client.kvClient
-  mvn clean install # to compile every file from the start and erase the target folder
-  #The compiled .class files will be placed at the ./target/classes folder
+mvn clean install
 ```
 
 ## Run Locally
