@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.mariuszgromada.math.mxparser.*;
 
 public class kvClientAppManager {
@@ -241,7 +243,7 @@ public class kvClientAppManager {
             System.out.println("WARNING - Not enough servers responded");
         }
 
-         return   getResponse(serverResponses,true);
+        return   getResponse(serverResponses,true);
 
     }
 
@@ -249,61 +251,70 @@ public class kvClientAppManager {
 
 
     public String getResponse(ConcurrentLinkedQueue<String> serverResponses, boolean printResponse){
-        String response = serverResponses.poll();
+        if(serverResponses.isEmpty()) {
+            if(printResponse) {
+                System.out.println("NOT FOUND");
+            }
+            return null;
+        }
+
+        String validResponse = null;
+        List<String> allResponses = new ArrayList<>();
+
         while(!serverResponses.isEmpty()) {
-            String nextResponse = serverResponses.poll();
-            if(!response.equals("NOT FOUND") && !response.equals(nextResponse)) {
+            String response = serverResponses.poll();
+            allResponses.add(response);
+
+            if(!"NOT FOUND".equals(response) && validResponse == null) {
+                validResponse = response;
+            }
+        }
+
+        for(String response : allResponses) {
+            if(!"NOT FOUND".equals(response) && !response.equals(validResponse)) {
                 System.out.println("WARNING - Data is not consistent");
                 return null;
             }
         }
+
+        String finalResponse = (validResponse != null) ? validResponse : "NOT FOUND";
+
         if(printResponse) {
-            System.out.println(response);
+            System.out.println(finalResponse);
         }
 
-        if(response.equals("NOT FOUND") || response.equals(null)) {
-            return null;
-        }
-        else {
-            return response;
-        }
-
+        return finalResponse.equals("NOT FOUND") ? null : finalResponse;
     }
 
 
 
     public Boolean indexData(List<String> dataLines) {
+        AtomicInteger totalSuccesses = new AtomicInteger(0);
+
         dataLines.forEach(dataLine -> {
             List<ServerConnection> randomServers = serverManager.getRandomServers(replicationFactor);
+
             randomServers.forEach(serverConnection -> {
-                serverConnection.out.println("PUT " + dataLine);
-                try {
-                    String Response = serverConnection.in.readLine();
-                    if (Response.equals("OK")) {
-                        serverConnection.numberOfSuccessfulPUTRequests++;
-                        if (serverConnection.numberOfSuccessfulPUTRequests == dataLines.size()) {
-                            serverConnection.SuccessfullyIndexed = true;
+                synchronized (serverConnection) {
+                    try {
+                        serverConnection.out.println("PUT " + dataLine);
+
+                        String response = serverConnection.in.readLine();
+                        if ("OK".equals(response)) {
+                            totalSuccesses.incrementAndGet();
+                        } else {
+                            System.out.println("Non-OK response: " + response);
                         }
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
                     }
-                }
-                catch (Exception e) {
-                    System.out.println("Error while reading response from server: " + e.getMessage());
                 }
             });
         });
 
-        if(serverManager.getServerConnections().stream().filter(serverConnection -> serverConnection.SuccessfullyIndexed).count() == replicationFactor) {
-            System.out.println("Data indexed to all servers successfully");
-            return true;
-        }
-        else {
-            System.out.println(serverManager.getServerConnections().stream().filter(serverConnection -> serverConnection.SuccessfullyIndexed).count());
-            System.out.println(replicationFactor);
-            System.out.println("Data not indexed Successfully to all servers.Replication Errors occurred");
-            return false;
-        }
-
-
+        int expectedSuccesses = dataLines.size() * replicationFactor;
+        //System.out.println("Expected: " + expectedSuccesses + ", Got: " + totalSuccesses.get());
+        return totalSuccesses.get() == expectedSuccesses;
     }
 
 }

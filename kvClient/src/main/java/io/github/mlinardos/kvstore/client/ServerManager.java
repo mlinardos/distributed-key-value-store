@@ -31,6 +31,8 @@ public class ServerManager {
         return randomServers;
     }
 
+
+
     public  List<ServerConnection> connectToServers(List<ServerAddress> serverList) {
        this.serverConnections  = new CopyOnWriteArrayList<>();
         serverList.forEach(server -> {
@@ -89,7 +91,9 @@ public class ServerManager {
     }
 
 
-
+    public int getTotalServers() {
+        return serverConnections.size(); // or however you store all servers
+    }
 
 
 
