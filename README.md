@@ -104,7 +104,7 @@ Parameters:
 
 -k : Replication factor (data stored on k servers)
 
-# Alternatively with docker-compose
+## Alternatively with docker-compose
 
 A `docker-compose.yml` file is provided for easier setup. It will start 3 servers and the client.
 
@@ -148,7 +148,10 @@ docker-compose --profile client up
 
 ## 6. Accessing Logs
 ### All servers
+```bash 
 docker-compose logs -f
-
+```
 ### Specific server
+```bash
 docker-compose logs -f kvserver1
+```
