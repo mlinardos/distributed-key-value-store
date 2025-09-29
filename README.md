@@ -108,17 +108,17 @@ Parameters:
 
 A `docker-compose.yml` file is provided for easier setup. It will start 3 servers and the client.
 
-# 1. Generate test data
+## 1. Generate test data
 
-## 1.1 Create a key definition file (keyFile.txt) as described above.
+### 1.1 Create a key definition file (keyFile.txt) as described above.
 
-## 1.2 Build and run the data generator:
+### 1.2 Build and run the data generator:
 
 ```bash 
 docker-compose --profile tools run --rm gendata
 ```
 
-# 2. Start all servers
+## 2. Start all servers
 ```bash
 docker-compose up -d
 ```
@@ -131,24 +131,24 @@ kvserver2 8002
 
 kvserver3 8003
 
-# 3 Run the client
+## 3 Run the client
 ```bash
 docker-compose --profile client run --rm kvclient
 ```
-# 4. Stopping and Cleaning Up
+## 4. Stopping and Cleaning Up
 To stop and remove all containers, run:
 ```bash
 docker-compose down
 ```
 
-# 5. Starting client and servers together
+## 5. Starting client and servers together
 ```bash
 docker-compose --profile client up
 ```
 
-# 5. Accessing Logs
-## All servers
+## 6. Accessing Logs
+### All servers
 docker-compose logs -f
 
-## Specific server
+### Specific server
 docker-compose logs -f kvserver1
