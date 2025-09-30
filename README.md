@@ -158,4 +158,5 @@ docker-compose logs -f kvserver1
 ```
 
 ## Alternatively with maven (without Docker)
-# Refer to the individual README files in kvClient, kvServer, and genData directories for detailed instructions on building and running each component using Maven.
+
+ Refer to the individual README files in kvClient, kvServer, and genData directories for detailed instructions on building and running each component using Maven.
