@@ -17,6 +17,7 @@ A fault-tolerant, distributed key-value database implementing:
 
 - Docker
 - Docker Compose (optional)
+- Maven (if you are not using Docker)
 
 ## Quick Start
 
@@ -155,3 +156,6 @@ docker-compose logs -f
 ```bash
 docker-compose logs -f kvserver1
 ```
+
+## Alternatively with maven (without Docker)
+# Refer to the individual README files in kvClient, kvServer, and genData directories for detailed instructions on building and running each component using Maven.
