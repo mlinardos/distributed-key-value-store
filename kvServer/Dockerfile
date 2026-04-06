@@ -9,7 +9,7 @@ COPY . .
 RUN mvn clean package -pl kvServer -am
 
 # Runtime stage
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 

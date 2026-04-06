@@ -3,7 +3,7 @@ WORKDIR /build
 COPY . .
 RUN mvn clean package -pl kvClient -am
 
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /workspace
 COPY --from=build /build/kvClient/target/kv-client-1.0.0-SNAPSHOT-jar-with-dependencies.jar /app/app.jar
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -78,13 +78,13 @@ docker run -d -p 8003:8003 --rm --name kvserver3 kv-server:latest -a 0.0.0.0 -p 
 
 #### 3.1 Create configuration files
 
-Create serverFile.txt with server addresses(not localhost but the Docker host IP):
+The `kvClient/serverFile.txt` file should contain the server addresses. Use `host.docker.internal` on Mac and Windows with Docker Desktop, or `172.17.0.1` on Linux:
 
-172.17.0.1 8000
+host.docker.internal 8000
 
-172.17.0.1 8002
+host.docker.internal 8002
 
-172.17.0.1 8003
+host.docker.internal 8003
 
 ### 3.2 Build the client image:
 
@@ -95,7 +95,7 @@ docker build -f kvClient/Dockerfile -t kv-client:latest .
 #### 3.3 Run the client container:
 ```bash
 docker run -it -v $(pwd):/workspace kv-client:latest \
--s serverFile.txt -i dataToIndex.txt -k 2
+-s kvClient/serverFile.txt -i dataToIndex.txt -k 2
 ```
 Parameters:
 

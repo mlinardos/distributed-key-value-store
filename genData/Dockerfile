@@ -3,7 +3,7 @@ WORKDIR /build
 COPY . .
 RUN mvn clean package -pl genData -am
 
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /workspace
 COPY --from=build /build/genData/target/kv-data-generator-1.0.0-SNAPSHOT.jar /app/app.jar
 ENTRYPOINT ["java", "-cp", "/app/app.jar", "io.github.mlinardos.kvstore.generator.genData"]
