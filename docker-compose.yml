@@ -10,7 +10,7 @@ services:
     networks:
       - kv-network
     healthcheck:
-      test: ["CMD-SHELL", "echo > /dev/tcp/localhost/8000 || exit 1"]
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8000' || exit 1"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -27,7 +27,7 @@ services:
     networks:
       - kv-network
     healthcheck:
-      test: ["CMD-SHELL", "echo > /dev/tcp/localhost/8002 || exit 1"]
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8002' || exit 1"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -44,7 +44,7 @@ services:
     networks:
       - kv-network
     healthcheck:
-      test: ["CMD-SHELL", "echo > /dev/tcp/localhost/8003 || exit 1"]
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8003' || exit 1"]
       interval: 5s
       timeout: 3s
       retries: 10
