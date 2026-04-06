@@ -107,54 +107,49 @@ Parameters:
 
 ## Alternatively with docker-compose
 
-A `docker-compose.yml` file is provided for easier setup. It will start 3 servers and the client.
+A `docker-compose.yml` file is provided for easier setup. It will start 3 servers and the client. Server addresses are pre-configured in `kvClient/serverFileCompose.txt` — no manual editing needed.
 
-## 1. Generate test data
+### 1. Generate test data
 
-### 1.1 Create a key definition file (keyFile.txt) as described above.
+#### 1.1 Create a key definition file (keyFile.txt) as described above.
 
-### 1.2 Build and run the data generator:
+#### 1.2 Build and run the data generator:
 
-```bash 
-docker-compose --profile tools run --rm gendata
-```
-
-## 2. Start all servers
 ```bash
-docker-compose up -d
+docker compose --profile tools run --rm gendata
 ```
 
-In the serverFile.txt, replace localhost the IPs with
-
-kvserver1 8000
-
-kvserver2 8002
-
-kvserver3 8003
-
-## 3 Run the client
+### 2. Start all servers
 ```bash
-docker-compose --profile client run --rm kvclient
+docker compose up -d
 ```
-## 4. Stopping and Cleaning Up
+
+The client will automatically wait for all 3 servers to be ready before connecting.
+
+### 3. Run the client
+```bash
+docker compose --profile client run --rm kvclient
+```
+
+### 4. Stopping and Cleaning Up
 To stop and remove all containers, run:
 ```bash
-docker-compose down
+docker compose down
 ```
 
-## 5. Starting client and servers together
+### 5. Starting client and servers together
 ```bash
-docker-compose --profile client up
+docker compose --profile client up
 ```
 
-## 6. Accessing Logs
-### All servers
-```bash 
-docker-compose logs -f
-```
-### Specific server
+### 6. Accessing Logs
+#### All servers
 ```bash
-docker-compose logs -f kvserver1
+docker compose logs -f
+```
+#### Specific server
+```bash
+docker compose logs -f kvserver1
 ```
 
 ## Alternatively with maven (without Docker)

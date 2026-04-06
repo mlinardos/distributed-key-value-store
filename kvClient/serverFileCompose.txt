@@ -1,0 +1,3 @@
+kvserver1 8000
+kvserver2 8002
+kvserver3 8003
