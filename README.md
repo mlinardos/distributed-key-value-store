@@ -152,6 +152,94 @@ docker compose logs -f
 docker compose logs -f kvserver1
 ```
 
+## Available Commands
+
+Once the client is running and data is indexed, the following commands are available interactively.
+
+> **Note:** Keys and key-path members must **not** be enclosed in quotation marks.
+
+### GET
+Retrieve the full value for a top-level key:
+```
+GET <top-level-key>
+```
+```
+GET person2
+```
+Returns `NOT FOUND` if the key does not exist. Returns a warning if fewer servers than the replication factor responded, but still attempts to return the data.
+
+---
+
+### QUERY
+Retrieve a nested value by dot-separated key path:
+```
+QUERY <key-path>
+```
+```
+QUERY person2.address.street
+```
+Each segment of the path is separated by a `.`. Works for both top-level keys and arbitrarily deep nested keys.
+
+---
+
+### DELETE
+Delete a record by top-level key:
+```
+DELETE <top-level-key>
+```
+```
+DELETE person2
+```
+The delete is sent to every connected server. Only works for top-level keys.
+
+---
+
+### COMPUTE
+Evaluate a math expression, optionally using values from the store as variables:
+```
+COMPUTE <expression>
+COMPUTE <expression> WHERE <var> = QUERY <key-path>
+COMPUTE <expression> WHERE <var> = QUERY <key-path> AND <var2> = QUERY <key-path2>
+```
+
+Examples:
+```
+COMPUTE 1+1
+COMPUTE 2*x WHERE x = QUERY person2.address.number
+COMPUTE 2/(x+3*(y+z)) WHERE x = QUERY person2.address.number AND y = QUERY person1.age
+```
+Supports standard operators and functions such as `log`, `sin`, `cos`, and all other functions provided by the [mXParser library](https://mathparser.org/). If a queried key does not exist or its value cannot be converted to a number, that variable is set to `0`.
+
+---
+
+### Quit
+```
+q
+```
+Gracefully disconnects from all servers before exiting.
+
+---
+
+### Help
+```
+h
+```
+Prints the list of available commands.
+
+---
+
+## Data Format
+
+Records follow this structure:
+```
+"person2" -> [ "name" -> "Mary" | "address" -> [ "street" -> "Panepistimiou" | "number" -> 12 ]]
+```
+- `->` separates a key from its value
+- `|` separates multiple key-value pairs
+- `[` `]` denote nested objects
+
+---
+
 ## Alternatively with maven (without Docker)
 
  Refer to the individual README files in kvClient, kvServer, and genData directories for detailed instructions on building and running each component using Maven.
