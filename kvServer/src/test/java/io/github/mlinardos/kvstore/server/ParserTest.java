@@ -9,7 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 // Tests Parser's wire format <-> Map conversion.
-// Wire format: "key" -> "value" | "n" -> 42 | "nested" -> [ "k" -> "v" ]
+// Wire format: one  "key" -> value  per line, where value is a string, a number,
+// or a nested group of key/values:  [ "k" -> "v" | "k2" -> 42 ]
 class ParserTest {
 
     private final Parser parser = new Parser();
@@ -99,5 +100,22 @@ class ParserTest {
 
         assertEquals("username -> \"gwfuj\"", parser.resultToString("username", person.get("username")));
         assertEquals("grade -> 90", parser.resultToString("grade", person.get("grade")));
+    }
+
+    // Verbatim line copied from dataToIndex.txt, with the generator's real
+    // double-space delimiters, to prove production output parses.
+    @Test
+    void parsesVerbatimGeneratorLine() throws Exception {
+        String line = "\"person3\"  ->  [ \"username\"  ->  \"gwfuj\"   | \"grade\"  ->  90   "
+                + "| \"timezone\"  ->  \"yi\"   | \"university\"  ->  \"i\"   | \"city\"  ->  \"hu\"   ]";
+
+        Map<String, Object> result = parser.parseString(line);
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> person = (Map<String, Object>) result.get("person3");
+        assertEquals("gwfuj", person.get("username"));
+        assertEquals(90, person.get("grade"));
+        assertEquals("hu", person.get("city"));
+        assertEquals(5, person.size());
     }
 }
