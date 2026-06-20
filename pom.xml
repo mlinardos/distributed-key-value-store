@@ -25,8 +25,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackson.version>2.14.1</jackson.version>
         <mxparser.version>5.1.0</mxparser.version>
+        <junit.version>5.10.2</junit.version>
+        <surefire.version>3.2.5</surefire.version>
     </properties>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -39,6 +41,25 @@
                 <artifactId>MathParser.org-mXparser</artifactId>
                 <version>${mxparser.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
